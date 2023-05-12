@@ -1,4 +1,5 @@
-import { NeactNode, createElement } from '../fn';
+import { NeactNode } from 'nottie';
+import { createElement } from '../fn';
 
 // 커멘트 툴을 그리는 함수 작성
 export const insertImageCard: NeactNode = {

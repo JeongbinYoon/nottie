@@ -13,6 +13,7 @@ declare module 'nottie' {
       value: string
     }[]
     className?: string[]
+    innerValue?: string
   }
   export type HTMLElementTagMap = HTMLElementTagNameMap & SVGElementTagNameMap
 
@@ -21,6 +22,7 @@ declare module 'nottie' {
     children?: createElementNode[]
     className?: string[]
     target: HTMLElement
+    innerValue?: string
   }
 
   export interface EditorNode {

@@ -120,8 +120,8 @@ ul {
   position: fixed;
   top: 0;
   left: 0;
-  opacity: 0%;
-  z-index: -1;
+  /* opacity: 0%; */
+  /* z-index: -1; */
 }
 .command-container.active {
   opacity: 100%;
@@ -140,8 +140,8 @@ ul {
   border-radius: 5px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
   font-size: 14px;
-  opacity: 0%;
-  z-index: -1;
+  /* opacity: 0%; */
+  /* z-index: -1; */
   transition: opacity 0.2s;
 }
 .command-container .command.active {
@@ -210,8 +210,8 @@ ul {
   border: 1px solid #eaeaea;
   border-radius: 5px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
-  opacity: 0%;
-  z-index: -1;
+  /* opacity: 0%; */
+  /* z-index: -1; */
   transition: opacity 0.2s;
 }
 .command-container .image.second-command-depth.active {
@@ -229,56 +229,27 @@ ul {
 .command-container .image.second-command-depth .image-header .header-list > li {
   font-size: 14px;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li
-  .border {
+.command-container .image.second-command-depth .image-header .header-list > li .border {
   width: 60%;
   margin: 0 auto;
   border-bottom: 2px solid #333;
-  opacity: 0;
+  /* opacity: 0; */
   transition: opacity 0.15s;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li:hover
-  > span {
+.command-container .image.second-command-depth .image-header .header-list > li:hover > span {
   background: #f0f0f0;
   cursor: pointer;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li:focus {
+.command-container .image.second-command-depth .image-header .header-list > li:focus {
   outline: none;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li:focus
-  > span {
+.command-container .image.second-command-depth .image-header .header-list > li:focus > span {
   background: #f0f0f0;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li.active
-  .border {
+.command-container .image.second-command-depth .image-header .header-list > li.active .border {
   opacity: 100%;
 }
-.command-container
-  .image.second-command-depth
-  .image-header
-  .header-list
-  > li
-  > span {
+.command-container .image.second-command-depth .image-header .header-list > li > span {
   display: inline-block;
   padding: 3px 10px;
   margin-bottom: 4px;
@@ -288,18 +259,10 @@ ul {
 .command-container .image.second-command-depth .image-body {
   padding: 10px;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .upload_file
-  > input {
+.command-container .image.second-command-depth .image-body .upload_file > input {
   display: none;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .upload_file
-  .imageInputButton {
+.command-container .image.second-command-depth .image-body .upload_file .imageInputButton {
   width: 100%;
   padding: 10px 0;
   text-align: center;
@@ -310,11 +273,7 @@ ul {
   border-radius: 3px;
   cursor: pointer;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .upload_file
-  .imageInputButton:focus {
+.command-container .image.second-command-depth .image-body .upload_file .imageInputButton:focus {
   outline: 1px solid #578cff;
 }
 .command-container .image.second-command-depth .image-body .embed-link {
@@ -332,18 +291,10 @@ ul {
   border-radius: 3px;
   box-sizing: border-box;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .embed-link
-  > input:focus {
+.command-container .image.second-command-depth .image-body .embed-link > input:focus {
   outline: 1px solid #578cff;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .embed-link
-  > button {
+.command-container .image.second-command-depth .image-body .embed-link > button {
   width: 60%;
   margin: 0 auto;
   padding: 7px 0;
@@ -352,17 +303,9 @@ ul {
   border: none;
   border-radius: 3px;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .embed-link
-  > button:focus {
+.command-container .image.second-command-depth .image-body .embed-link > button:focus {
   outline: 1px solid #578cff;
 }
-.command-container
-  .image.second-command-depth
-  .image-body
-  .embed-link
-  > button:hover {
+.command-container .image.second-command-depth .image-body .embed-link > button:hover {
   cursor: pointer;
 }

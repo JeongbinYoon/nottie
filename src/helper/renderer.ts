@@ -1,4 +1,5 @@
-import type { Render, createElementFn, createElementNode } from 'nottie'
+import type { NeactNode, Render, createElementFn, createElementNode } from 'nottie'
+import type { Editor } from '@tiptap/core'
 export const hasCodeTag = (node: Node) => {
   return node?.parentElement?.localName === 'code'
 }
@@ -18,6 +19,10 @@ export const createElement: createElementFn = (node) => {
       })
     } else {
       target[key] = restOptions[key] as any
+    }
+
+    if (restOptions.innerValue) {
+      target.innerHTML = restOptions.innerValue
     }
   })
 
@@ -42,3 +47,5 @@ export const render: Render = (targetEl, node) => {
     target: node.target,
   }
 }
+
+export type bindEditor = (editor: Editor) => NeactNode

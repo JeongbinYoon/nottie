@@ -13,9 +13,9 @@ import { mergeAttributes, Extension, Editor } from '@tiptap/core'
 import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
 import StarterKit from '@tiptap/starter-kit'
-import { hasCodeTag, render } from './helper/renderer'
+import { createElement, hasCodeTag, render } from './helper/renderer'
 import type { EditorOptions } from '@tiptap/core'
-import { imageCard } from './extention/command-tools'
+import { insertImageCard } from './extention/command-tools'
 
 const classes = {
   1: 'text-4xl heading',
@@ -95,6 +95,7 @@ const CustomExtension = (target: Element) => {
     addKeyboardShortcuts() {
       return {
         '/': () => {
+          const imageCard = createElement(insertImageCard(this.editor))
           render(targetEl, imageCard)
           // _vm.showCommandContainer = true;
           // _vm.showCommand = true;

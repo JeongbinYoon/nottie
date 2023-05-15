@@ -11,7 +11,8 @@
     "text-editor",
     "editor",
     "javascript",
-    "tiptap"
+    "tiptap",
+    "notion"
   ],
   "scripts": {
     "build": "vite build",

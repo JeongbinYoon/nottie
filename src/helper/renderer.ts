@@ -11,11 +11,16 @@ export const createElement: createElementFn = (node) => {
     classNames.map((cls) => target.classList.add(cls))
   }
   const keys = Object.keys(restOptions) as (keyof typeof restOptions)[]
-  for (let i = 0; i < keys.length; i++) {
-    if (restOptions[keys[i]]) {
-      target[keys[i]] = restOptions[keys[i]] as any
+  keys.forEach((key) => {
+    if (key === 'attributes') {
+      restOptions.attributes?.forEach((attribute) => {
+        target.setAttribute(attribute.key, attribute.value)
+      })
+    } else {
+      target[key] = restOptions[key] as any
     }
-  }
+  })
+
   let returnNode: createElementNode = {
     type,
     className: classNames,

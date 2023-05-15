@@ -8,6 +8,10 @@ declare module 'nottie' {
   export interface NeactNode extends NodeOption {
     type: TagName
     children?: NeactNode[]
+    attributes?: {
+      key: string
+      value: string
+    }[]
     className?: string[]
   }
   export type HTMLElementTagMap = HTMLElementTagNameMap & SVGElementTagNameMap

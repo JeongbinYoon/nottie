@@ -3,10 +3,11 @@
     "target": "ESNext",
     "lib": [
       "DOM",
-      "ES2016"
+      "ES2016",
+      "DOM.Iterable"
     ],
     "types": ["node"],
-    "module": "CommonJS",
+    "module": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "resolveJsonModule": true,

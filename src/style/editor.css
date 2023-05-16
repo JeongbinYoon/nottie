@@ -309,3 +309,7 @@ ul {
 .command-container .image.second-command-depth .image-body .embed-link > button:hover {
   cursor: pointer;
 }
+
+.transition-in {
+  opacity: 1 !important;
+}

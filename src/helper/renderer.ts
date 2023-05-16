@@ -41,11 +41,17 @@ export const createElement: createElementFn = (node) => {
 
   return returnNode
 }
-export const render: Render = (targetEl, node) => {
+export const render: Render = (targetEl, node, duration = 200) => {
   targetEl.appendChild(node.target)
+  node.target.style.opacity = '0'
+  node.target.style.transition = `opacity ${duration / 1000}s ease-in-out`
+  requestAnimationFrame(() => {
+    node.target.classList.add('transition-in')
+  })
+
   return {
     target: node.target,
   }
 }
 
-export type bindEditor = (editor: Editor) => NeactNode
+export type bindEditor = (editor: Editor, depth: string) => NeactNode

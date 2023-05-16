@@ -15,7 +15,7 @@ import Image from '@tiptap/extension-image'
 import StarterKit from '@tiptap/starter-kit'
 import { createElement, hasCodeTag, render } from './helper/renderer'
 import type { EditorOptions } from '@tiptap/core'
-import { insertImageCard } from './extention/command-tools'
+import { insertImageCard, moveCommand, onPressAnyKey } from './extention/command-tools'
 
 const classes = {
   1: 'text-4xl heading',
@@ -56,6 +56,7 @@ const Heading = BaseHeading.configure({ levels: [1, 2, 3] }).extend({
         let enterCommand = false
         let canTab = false
         const lastChar = selection?.data && selection?.data[selection?.data?.length - 1]
+        console.log('lastChar', lastChar)
         if (selection?.innerText === '/' || lastChar === '/') {
           canTab = true
           enterCommand = true
@@ -83,6 +84,8 @@ const Heading = BaseHeading.configure({ levels: [1, 2, 3] }).extend({
           this.editor.commands.sinkListItem('listItem')
           this.editor.commands.focus('end')
         }
+
+        console.log('CanTab', canTab)
         return true
       },
     }
@@ -95,12 +98,24 @@ const CustomExtension = (target: Element) => {
     addKeyboardShortcuts() {
       return {
         '/': () => {
-          const imageCard = createElement(insertImageCard(this.editor))
+          const imageCard = createElement(insertImageCard(this.editor, 'first'))
           render(targetEl, imageCard)
+
+          // '/' > 'ArrowDown' 입력시 커맨드로 포커스 후 이벤트 삭제
+          const onFocusCommand = () => {
+            function onPressedNextKey(e: KeyboardEvent) {
+              if (e.code === 'ArrowDown' || e.code === 'Tab') {
+                console.log(e.code)
+                moveCommand('ArrowDown')
+                window.removeEventListener('keydown', onPressedNextKey)
+              }
+            }
+            window.addEventListener('keydown', onPressedNextKey)
+          }
+          onFocusCommand()
           // _vm.showCommandContainer = true;
           // _vm.showCommand = true;
           // this.editor.commands.insertContent('<p class="command_spot"> </p>');
-          return true
         },
       }
     },
@@ -129,13 +144,13 @@ export const createEditor = ({ editable = true, ...options }: EditorOption) => {
     ],
     editable,
     // onCreate(props) {},
-    // onUpdate: ({ transaction }) => {
-    //   // _vm.cursorPos = transaction.curSelection.$anchor.pos;
-    //   // _vm.onPressSlash();
-    //   // if (this.editable && this.isMounted) {
-    //   //   this.createAnchor();
-    //   // }
-    // },
+    onUpdate: ({ transaction }) => {
+      // _vm.cursorPos = transaction.curSelection.$anchor.pos;
+      onPressAnyKey()
+      // if (this.editable && this.isMounted) {
+      // this.createAnchor();
+      // }
+    },
     ...options,
   })
   return editor

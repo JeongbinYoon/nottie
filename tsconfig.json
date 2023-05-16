@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "ES2016"],
+    "lib": ["DOM", "ES2016", "DOM.Iterable"],
     "types": ["node"],
     "module": "ESNext",
     "allowJs": true,

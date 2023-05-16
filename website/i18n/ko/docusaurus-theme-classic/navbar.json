@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "내 사이트",
+    "description": "네비게이션 바 타이틀"
+  },
+  "logo.alt": {
+    "message": "내 사이트 로고",
+    "description": "네비게이션 로고 설명글"
+  },
+  "item.label.Tutorial": {
+    "message": "튜토리얼",
+    "description": "튜토리얼 네비게이션 바 아이템"
+  },
+  "item.label.Blog": {
+    "message": "블로그",
+    "description": "블로그 네비게이션 바 아이템"
+  },
+  "item.label.GitHub": {
+    "message": "깃허브",
+    "description": "깃허브 네비게이션 바 아이템"
+  }
+}

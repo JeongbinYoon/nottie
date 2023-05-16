@@ -4,14 +4,15 @@
   "version": "0.0.2",
   "main": "index.js",
   "license": "MIT",
-  "types": "types/index.ts",
+  "types": "build/src/index.d.ts",
   "description": "자바스크립트 웹 개발을 위한 노션 라이크 텍스트 에디터",
   "author": "Jeongbin Yoon <yon980824@gmail.com> raymondanything <raymondanything@gmail.com>",
   "keywords": [
     "text-editor",
     "editor",
     "javascript",
-    "tiptap"
+    "tiptap",
+    "notion"
   ],
   "scripts": {
     "dev": "vite",
@@ -42,6 +43,7 @@
     "@tiptap/pm": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
     "highlight.js": "^11.8.0",
-    "lowlight": "^2.9.0"
+    "lowlight": "^2.9.0",
+    "vite-plugin-dts": "^2.3.0"
   }
 }

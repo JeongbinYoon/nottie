@@ -3,6 +3,7 @@ declare module 'nottie' {
     id?: string
     onkeydown?: GlobalEventHandlers['onkeydown']
     onclick?: GlobalEventHandlers['onclick']
+    onchange?: GlobalEventHandlers['onchange']
   }
 
   export interface NeactNode extends NodeOption {

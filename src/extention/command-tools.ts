@@ -2,6 +2,7 @@ import { NeactNode } from 'nottie'
 import { bindEditor, createElement, render } from '../helper/renderer'
 import type { Editor } from '@tiptap/core'
 
+// 첫 번째 커맨드 리스트
 const firstDepth = (editor: Editor): NeactNode => {
   return {
     type: 'div',
@@ -19,7 +20,10 @@ const firstDepth = (editor: Editor): NeactNode => {
               {
                 type: 'li',
                 className: ['command__list--item'],
-                attributes: [{ key: 'tabindex', value: '0' }],
+                attributes: [
+                  { key: 'tabindex', value: '0' },
+                  { key: 'data-type', value: 'image' },
+                ],
                 onclick: () => openSecondDepth(editor, 'image'),
                 onkeydown: (e) =>
                   (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'image'),
@@ -542,22 +546,146 @@ const firstDepth = (editor: Editor): NeactNode => {
     ],
   }
 }
+
+// 두 번째 커맨드 리스트
 const secondDepth = (editor: Editor): NeactNode => {
   return {
     type: 'div',
     className: ['command-container'],
+    children: [
+      {
+        type: 'div',
+        className: ['active', 'image', 'second-command-depth'],
+        onkeydown: (e: KeyboardEvent) => onPressEscape(e),
+        children: [
+          {
+            type: 'div',
+            className: ['image-header'],
+            children: [
+              {
+                type: 'ul',
+                className: ['header-list'],
+                children: [
+                  {
+                    type: 'li',
+                    className: ['active'],
+                    attributes: [
+                      { key: 'tabindex', value: '0' },
+                      {
+                        key: 'data-type',
+                        value: 'file',
+                      },
+                    ],
+                    onclick: changeUploadImageType,
+                    onkeydown: (e) =>
+                      (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
+                    children: [
+                      {
+                        type: 'span',
+                        innerValue: '이미지',
+                      },
+                      {
+                        type: 'div',
+                        className: ['border'],
+                      },
+                    ],
+                  },
+                  {
+                    type: 'li',
+                    attributes: [
+                      { key: 'tabindex', value: '0' },
+                      {
+                        key: 'data-type',
+                        value: 'link',
+                      },
+                    ],
+                    onclick: changeUploadImageType,
+                    onkeydown: (e) =>
+                      (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
+                    children: [
+                      {
+                        type: 'span',
+                        innerValue: '링크',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'div',
+            className: ['image-body'],
+            children: [
+              {
+                type: 'div',
+                className: ['upload_file', 'active'],
+                attributes: [
+                  {
+                    key: 'data-type',
+                    value: 'file',
+                  },
+                ],
+                children: [
+                  {
+                    type: 'input',
+                    className: ['fileInputRef'],
+                    attributes: [
+                      { key: 'type', value: 'file' },
+                      { key: 'accept', value: 'image/*' },
+                    ],
+                    onchange: (e) => onAddImageFile(e, editor),
+                  },
+                  {
+                    type: 'button',
+                    className: ['imageInputButton'],
+                    onclick: showFilePicker,
+                    innerValue: '이미지 업로드',
+                  },
+                ],
+              },
+              {
+                type: 'div',
+                className: ['embed-link'],
+                attributes: [
+                  {
+                    key: 'data-type',
+                    value: 'link',
+                  },
+                ],
+                children: [
+                  {
+                    type: 'input',
+                    className: ['embedImageInputRef'],
+                    attributes: [
+                      { key: 'type', value: 'text' },
+                      { key: 'placeholder', value: '링크를 삽입하세요' },
+                    ],
+                  },
+                  {
+                    type: 'button',
+                    onclick: () => embedImageLink(editor),
+                    onkeydown: () => embedImageLink(editor),
+                    innerValue: '이미지 추가',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   }
 }
 
-// 커멘트 툴을 그리는 함수 작성
-
+// 커맨드 툴을 그리는 함수 작성
 export const insertImageCard: bindEditor = (editor: Editor, depth: string) => {
   if (depth === 'first') return firstDepth(editor)
   else if (depth === 'second') return secondDepth(editor)
   else return secondDepth(editor)
 }
 
-type key =
+type commandKey =
   | 'image'
   | 'heading-1'
   | 'heading-2'
@@ -570,6 +698,8 @@ type key =
 
 type pressedType = string
 
+// 커맨드 리스트에서 방향키 컨트롤
+let commandListFocused = false
 export function moveCommand(code: string): void
 export function moveCommand(e: KeyboardEvent, editor: Editor)
 export function moveCommand(e: KeyboardEvent, editor: Editor, code: string) {
@@ -598,21 +728,21 @@ export function moveCommand(e: KeyboardEvent, editor: Editor, code: string) {
         editor.commands.focus()
         currentTab = null
         // closeAllCommands()
-        document.querySelector('.command-container')?.remove()
+        closeCommand()
       }
     },
     Escape() {
       currentTab?.setAttribute('tabindex', '-1')
-      // commandListFocused = false
       editor.commands.focus()
-      // closeAllCommands()
-      document.querySelector('.command-container')?.remove()
+      closeCommand()
     },
     Enter() {
+      const type = e?.target?.dataset.type
       currentTab?.setAttribute('tabindex', '-1')
       commandList?.firstElementChild?.setAttribute('tabindex', '0')
-      // commandListFocused = false
-      document.querySelector('.command-container')?.remove()
+
+      // 다른 타입일 경우 Enter입력시 커맨드 선택 후 종료
+      if (type !== 'image') closeCommand()
     },
   }
 
@@ -621,25 +751,24 @@ export function moveCommand(e: KeyboardEvent, editor: Editor, code: string) {
     execution[pressed]()
   }
 
-  // currentTab ? (commandListFocused = true) : (commandListFocused = false)
+  currentTab ? (commandListFocused = true) : (commandListFocused = false)
 
   currentTab && (currentTab as HTMLElement).focus()
 }
 
 export const onPressAnyKey = () => {
   console.log('ANY KEY')
+
   function onPressOtherKey(e: KeyboardEvent) {
-    console.log('Pressed: ', e.code)
-    // if (e.code === 'Enter') {
-    //   // 목록 선택 중인 경우 secondDepthCommand 끄지 않음
-    //   // vm.commandListFocused || vm.closeAllCommands()
-    // } else if (e.code === 'ArrowDown') {
-    //   // moveCommand('ArrowDown')
-    // } else if (e.code !== 'Slash' && e.code !== 'Tab' && e.code !== 'ArrowDown') {
-    //   //  closeAllCommands()
-    // }
-    if (!(e.code === 'Enter' || e.code === 'ArrowDown' || e.code === 'Slash' || e.code === 'Tab')) {
-      document.querySelector('.command-container')?.remove()
+    const commandContainer = document.querySelector('.command-container')
+
+    if (!commandListFocused && commandContainer) {
+      console.log('Pressed: ', e.code)
+      if (
+        !(e.code === 'Enter' || e.code === 'ArrowDown' || e.code === 'Slash' || e.code === 'Tab')
+      ) {
+        closeCommand()
+      }
     }
 
     window.removeEventListener('keydown', onPressOtherKey)
@@ -647,14 +776,23 @@ export const onPressAnyKey = () => {
   window.addEventListener('keydown', onPressOtherKey)
 }
 
-const openSecondDepth = (editor: Editor, type: key) => {
-  const execution: Record<key, () => void> = {
+// 두 번째 커맨드 리스트 열기
+const openSecondDepth = (editor: Editor, type: commandKey) => {
+  // const myEvent = new CustomEvent('onSlashPress', {
+  //   detail: { test: 123 },
+  // })
+  // if (editor.options.element.dispatchEvent(myEvent)) {
+  //   editor.options.element.addEventListener('onSlashPress', (event) => {
+  //     event.detail.test
+  //   })
+  // }
+  const execution: Record<commandKey, () => void> = {
     image() {
-      // editor.commands.toggleHeading({ level: 1 })
-      editor.commands.focus('end')
-
+      commandListFocused = true
       render(editor.options.element, createElement(insertImageCard(editor, 'second')))
-      document.querySelector('.command-container')?.remove()
+      const activeMenu = document.querySelector('.second-command-depth .header-list .active')
+      activeMenu?.focus()
+      console.log(activeMenu)
     },
     'heading-1'() {
       editor.commands.toggleHeading({ level: 1 })
@@ -690,8 +828,66 @@ const openSecondDepth = (editor: Editor, type: key) => {
     },
   }
   if (type in execution) {
+    closeCommand()
     execution[type]()
   }
 }
 
-// export const imageCard = createElement(insertImageCard)
+// 이미지 파일, 링크 선택시 해당 콘텐츠 변경
+const changeUploadImageType = (e: KeyboardEvent | MouseEvent) => {
+  const target = e.currentTarget
+  const type = target.dataset.type
+  target.parentElement.childNodes.forEach((li: HTMLElement) => li.classList.remove('active'))
+  target.classList.add('active')
+
+  const contents = document.querySelector('.image-body')
+  contents?.childNodes.forEach((content) => {
+    if (content.dataset.type === type) {
+      content.classList.add('active')
+    } else {
+      content.classList.remove('active')
+    }
+  })
+}
+
+// 이미지 파일 업로드
+const onAddImageFile = async (e: any, editor: Editor) => {
+  // const file = e?.target.files[0]
+  // if (file?.type?.includes('image')) {
+  //   // const fileData = await client.assets.upload('image', file)
+  //   editor?.chain().focus().setImage({ src: fileData.url }).run()
+  //   closeCommand()
+  //   editor?.commands.focus('end')
+  // } else {
+  //   alert('지원하지 않는 확장자')
+  // }
+}
+
+// Input 파일 선택 창 로드
+const showFilePicker = () => {
+  const fileInputRef: HTMLInputElement | null = document.querySelector('.fileInputRef')
+
+  if (fileInputRef) fileInputRef.showPicker()
+}
+
+// 링크 이미지 업로드
+const embedImageLink = (editor: Editor) => {
+  const embedImageInputRef: HTMLInputElement | null = document.querySelector('.embedImageInputRef')
+
+  if (embedImageInputRef) {
+    editor.commands.setImage({ src: embedImageInputRef.value })
+    closeCommand()
+    editor.commands.focus('end')
+  }
+}
+
+const onPressEscape = (e: KeyboardEvent) => {
+  e.code === 'Escape' && closeCommand()
+}
+
+// 커맨드 삭제
+const closeCommand = () => {
+  commandListFocused = false
+  document.querySelector('.command-container')?.remove()
+  console.log('close')
+}

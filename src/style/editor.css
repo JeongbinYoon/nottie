@@ -120,8 +120,6 @@ ul {
   position: fixed;
   top: 0;
   left: 0;
-  /* opacity: 0%; */
-  /* z-index: -1; */
 }
 .command-container.active {
   opacity: 100%;
@@ -140,8 +138,6 @@ ul {
   border-radius: 5px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
   font-size: 14px;
-  /* opacity: 0%; */
-  /* z-index: -1; */
   transition: opacity 0.2s;
 }
 .command-container .command.active {
@@ -210,8 +206,6 @@ ul {
   border: 1px solid #eaeaea;
   border-radius: 5px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
-  /* opacity: 0%; */
-  /* z-index: -1; */
   transition: opacity 0.2s;
 }
 .command-container .image.second-command-depth.active {
@@ -223,8 +217,10 @@ ul {
   border-bottom: 1px solid #eaeaea;
 }
 .command-container .image.second-command-depth .image-header .header-list {
-  list-style: none;
   display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 .command-container .image.second-command-depth .image-header .header-list > li {
   font-size: 14px;
@@ -233,7 +229,6 @@ ul {
   width: 60%;
   margin: 0 auto;
   border-bottom: 2px solid #333;
-  /* opacity: 0; */
   transition: opacity 0.15s;
 }
 .command-container .image.second-command-depth .image-header .header-list > li:hover > span {
@@ -257,7 +252,13 @@ ul {
   transition: background 0.1s;
 }
 .command-container .image.second-command-depth .image-body {
-  padding: 10px;
+  padding: 15px;
+}
+.command-container .image.second-command-depth .image-body > div {
+  display: none !important;
+}
+.command-container .image.second-command-depth .image-body > div.active {
+  display: flex !important;
 }
 .command-container .image.second-command-depth .image-body .upload_file > input {
   display: none;
@@ -282,7 +283,7 @@ ul {
 }
 .command-container .image.second-command-depth .image-body .embed-link > input {
   width: 100%;
-  height: 30px;
+  height: 35px;
   margin-bottom: 10px;
   padding: 0 10px;
   color: #777;
@@ -295,9 +296,9 @@ ul {
   outline: 1px solid #578cff;
 }
 .command-container .image.second-command-depth .image-body .embed-link > button {
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
-  padding: 7px 0;
+  padding: 10px 0;
   background: #578cff;
   color: #fff;
   border: none;

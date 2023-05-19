@@ -16,6 +16,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { createElement, hasCodeTag, render } from './helper/renderer'
 import type { EditorOptions } from '@tiptap/core'
 import { insertImageCard, moveCommand, onPressAnyKey } from './extention/command-tools'
+import { KeyDownEvent } from './types'
 
 const classes = {
   1: 'text-4xl heading',
@@ -96,6 +97,7 @@ const CustomExtension = (target: Element) => {
   const targetEl = target
   return Extension.create({
     addKeyboardShortcuts() {
+      const editor = this.editor
       return {
         '/': () => {
           const imageCard = createElement(insertImageCard(this.editor, 'first'))
@@ -103,14 +105,15 @@ const CustomExtension = (target: Element) => {
 
           // '/' > 'ArrowDown' 입력시 커맨드로 포커스 후 이벤트 삭제
           const onFocusCommand = () => {
-            function onPressedNextKey(e: KeyboardEvent) {
+            function onPressedNextKey(e: KeyDownEvent) {
               if (e.code === 'ArrowDown' || e.code === 'Tab') {
-                console.log(e.code)
-                moveCommand('ArrowDown')
-                window.removeEventListener('keydown', onPressedNextKey)
+                moveCommand(editor)
+                window.removeEventListener('keydown', (event) =>
+                  onPressedNextKey(event as KeyDownEvent),
+                )
               }
             }
-            window.addEventListener('keydown', onPressedNextKey)
+            window.addEventListener('keydown', (event) => onPressedNextKey(event as KeyDownEvent))
           }
           onFocusCommand()
           // _vm.showCommandContainer = true;
@@ -146,7 +149,7 @@ export const createEditor = ({ editable = true, ...options }: EditorOption) => {
     // onCreate(props) {},
     onUpdate: ({ transaction }) => {
       // _vm.cursorPos = transaction.curSelection.$anchor.pos;
-      onPressAnyKey()
+      onPressAnyKey(editor)
       // if (this.editable && this.isMounted) {
       // this.createAnchor();
       // }

@@ -34,5 +34,29 @@ declare module 'nottie' {
   export type createElementFn = (node: NeactNode) => createElementNode
 
   export type Render = (target: Element, node: createElementNode) => EditorNode
-  export type TagName = keyof HTMLElementTagNameMap
+  export type TagName = keyof HTMLElementTagMap
+}
+export type pressedKeyType =
+  | 'ArrowDown'
+  | 'ArrowUp'
+  | 'ArrowRight'
+  | 'ArrowLeft'
+  | 'Escape'
+  | 'Enter'
+  | 'Space'
+  | 'Slash'
+  | 'Tab'
+export type commandKeyType =
+  | 'image'
+  | 'heading-1'
+  | 'heading-2'
+  | 'heading-3'
+  | 'heading-4'
+  | 'paragraph'
+  | 'bullet'
+  | 'ordered'
+  | 'code-block'
+
+export interface KeyDownEvent extends KeyboardEvent {
+  code: pressedKeyType
 }

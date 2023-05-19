@@ -1,6 +1,7 @@
 import { NeactNode } from 'nottie'
 import { bindEditor, createElement, render } from '../helper/renderer'
 import type { Editor } from '@tiptap/core'
+import { KeyDownEvent, commandKeyType, pressedKeyType } from '../types/nottie'
 
 // 첫 번째 커맨드 리스트
 const firstDepth = (editor: Editor): NeactNode => {
@@ -15,7 +16,7 @@ const firstDepth = (editor: Editor): NeactNode => {
           {
             type: 'ul',
             className: ['command__list'],
-            onkeydown: (e: KeyboardEvent) => moveCommand(e, editor),
+            onkeydown: (e: KeyDownEvent) => moveCommand(editor, e),
             children: [
               {
                 type: 'li',
@@ -25,7 +26,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                   { key: 'data-type', value: 'image' },
                 ],
                 onclick: () => openSecondDepth(editor, 'image'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'image'),
                 children: [
                   {
@@ -82,7 +83,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'heading-1'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'heading-1'),
                 children: [
@@ -140,7 +141,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'heading-2'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'heading-2'),
                 children: [
@@ -198,7 +199,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'heading-3'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'heading-3'),
                 children: [
@@ -256,7 +257,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'heading-4'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'heading-4'),
                 children: [
@@ -314,7 +315,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'paragraph'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'paragraph'),
                 children: [
@@ -372,7 +373,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'bullet'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'bullet'),
                 children: [
                   {
@@ -429,7 +430,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'ordered'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'ordered'),
                 children: [
                   {
@@ -486,7 +487,7 @@ const firstDepth = (editor: Editor): NeactNode => {
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
                 onclick: () => openSecondDepth(editor, 'code-block'),
-                onkeydown: (e) =>
+                onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
                   openSecondDepth(editor, 'code-block'),
                 children: [
@@ -556,7 +557,7 @@ const secondDepth = (editor: Editor): NeactNode => {
       {
         type: 'div',
         className: ['active', 'image', 'second-command-depth'],
-        onkeydown: (e: KeyboardEvent) => onPressEscape(e),
+        onkeydown: (e: KeyDownEvent) => onPressEscape(e, editor),
         children: [
           {
             type: 'div',
@@ -577,16 +578,12 @@ const secondDepth = (editor: Editor): NeactNode => {
                       },
                     ],
                     onclick: changeUploadImageType,
-                    onkeydown: (e) =>
+                    onkeydown: (e: KeyDownEvent) =>
                       (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
                     children: [
                       {
                         type: 'span',
                         innerValue: '이미지',
-                      },
-                      {
-                        type: 'div',
-                        className: ['border'],
                       },
                     ],
                   },
@@ -600,7 +597,45 @@ const secondDepth = (editor: Editor): NeactNode => {
                       },
                     ],
                     onclick: changeUploadImageType,
-                    onkeydown: (e) =>
+                    onkeydown: (e: KeyDownEvent) =>
+                      (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
+                    children: [
+                      {
+                        type: 'span',
+                        innerValue: '링크링크링크',
+                      },
+                    ],
+                  },
+                  {
+                    type: 'li',
+                    attributes: [
+                      { key: 'tabindex', value: '0' },
+                      {
+                        key: 'data-type',
+                        value: 'link',
+                      },
+                    ],
+                    onclick: changeUploadImageType,
+                    onkeydown: (e: KeyDownEvent) =>
+                      (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
+                    children: [
+                      {
+                        type: 'span',
+                        innerValue: '링크',
+                      },
+                    ],
+                  },
+                  {
+                    type: 'li',
+                    attributes: [
+                      { key: 'tabindex', value: '0' },
+                      {
+                        key: 'data-type',
+                        value: 'link',
+                      },
+                    ],
+                    onclick: changeUploadImageType,
+                    onkeydown: (e: KeyDownEvent) =>
                       (e.code === 'Space' || e.code === 'Enter') && changeUploadImageType(e),
                     children: [
                       {
@@ -610,6 +645,10 @@ const secondDepth = (editor: Editor): NeactNode => {
                     ],
                   },
                 ],
+              },
+              {
+                type: 'div',
+                className: ['border'],
               },
             ],
           },
@@ -634,7 +673,7 @@ const secondDepth = (editor: Editor): NeactNode => {
                       { key: 'type', value: 'file' },
                       { key: 'accept', value: 'image/*' },
                     ],
-                    onchange: (e) => onAddImageFile(e, editor),
+                    onchange: (e: Event) => onAddImageFile(e, editor),
                   },
                   {
                     type: 'button',
@@ -685,32 +724,20 @@ export const insertImageCard: bindEditor = (editor: Editor, depth: string) => {
   else return secondDepth(editor)
 }
 
-type commandKey =
-  | 'image'
-  | 'heading-1'
-  | 'heading-2'
-  | 'heading-3'
-  | 'heading-4'
-  | 'paragraph'
-  | 'bullet'
-  | 'ordered'
-  | 'code-block'
-
-type pressedType = string
-
 // 커맨드 리스트에서 방향키 컨트롤
 let commandListFocused = false
-export function moveCommand(code: string): void
-export function moveCommand(e: KeyboardEvent, editor: Editor)
-export function moveCommand(e: KeyboardEvent, editor: Editor, code: string) {
-  const pressed = code ?? e?.code
+interface MoveCommand {
+  (editor: Editor, e?: KeyDownEvent): void
+}
+
+export const moveCommand: MoveCommand = (editor, e) => {
   const commandList = document.querySelector('.command .command__list')
 
-  let currentTab = commandList && (<Element>commandList).querySelector('li[tabindex="0"]')
+  let currentTab = commandList && commandList.querySelector('li[tabindex="0"]')
   let prevTab = currentTab?.previousElementSibling ?? null
   let nextTab = currentTab?.nextElementSibling ?? currentTab
 
-  const execution: Record<pressedType, () => void> = {
+  const execution: Partial<Record<pressedKeyType, () => void>> = {
     ArrowDown() {
       prevTab = currentTab
       currentTab = nextTab
@@ -727,57 +754,68 @@ export function moveCommand(e: KeyboardEvent, editor: Editor, code: string) {
         // 가상 상위 리스트일 경우 editor로 돌아감
         editor.commands.focus()
         currentTab = null
-        // closeAllCommands()
-        closeCommand()
+        closeCommand(editor)
       }
     },
     Escape() {
       currentTab?.setAttribute('tabindex', '-1')
       editor.commands.focus()
-      closeCommand()
+      closeCommand(editor)
     },
     Enter() {
-      const type = e?.target?.dataset.type
-      currentTab?.setAttribute('tabindex', '-1')
-      commandList?.firstElementChild?.setAttribute('tabindex', '0')
+      // const type = e?.target?.dataset.type
+      if (e) {
+        const {
+          target: {
+            dataset: { type },
+          },
+        } = e
 
-      // 다른 타입일 경우 Enter입력시 커맨드 선택 후 종료
-      if (type !== 'image') closeCommand()
+        currentTab?.setAttribute('tabindex', '-1')
+        commandList?.firstElementChild?.setAttribute('tabindex', '0')
+
+        // 다른 타입일 경우 Enter입력시 커맨드 선택 후 종료
+        if (type !== 'image') closeCommand(editor)
+      }
     },
   }
 
-  if (pressed in execution) {
-    console.log(pressed)
-    execution[pressed]()
+  if (e) {
+    execution[e.code]?.()
   }
 
-  currentTab ? (commandListFocused = true) : (commandListFocused = false)
-
+  currentTab ? commandListFocused : !commandListFocused
   currentTab && (currentTab as HTMLElement).focus()
 }
 
-export const onPressAnyKey = () => {
-  console.log('ANY KEY')
-
-  function onPressOtherKey(e: KeyboardEvent) {
+export const onPressAnyKey = (editor: Editor) => {
+  function onPressOtherKey(e: KeyDownEvent) {
     const commandContainer = document.querySelector('.command-container')
 
     if (!commandListFocused && commandContainer) {
-      console.log('Pressed: ', e.code)
       if (
-        !(e.code === 'Enter' || e.code === 'ArrowDown' || e.code === 'Slash' || e.code === 'Tab')
+        !(
+          e.code === 'Enter' ||
+          e.code === 'ArrowDown' ||
+          e.code === 'ArrowUp' ||
+          e.code === 'ArrowRight' ||
+          e.code === 'ArrowLeft' ||
+          e.code === 'Slash' ||
+          e.code === 'Tab'
+        )
       ) {
-        closeCommand()
+        editor.commands.focus()
+        closeCommand(editor)
       }
     }
 
-    window.removeEventListener('keydown', onPressOtherKey)
+    window.removeEventListener('keydown', (e) => onPressOtherKey(e as KeyDownEvent))
   }
-  window.addEventListener('keydown', onPressOtherKey)
+  window.addEventListener('keydown', (e) => onPressOtherKey(e as KeyDownEvent))
 }
 
 // 두 번째 커맨드 리스트 열기
-const openSecondDepth = (editor: Editor, type: commandKey) => {
+const openSecondDepth = (editor: Editor, type: commandKeyType) => {
   // const myEvent = new CustomEvent('onSlashPress', {
   //   detail: { test: 123 },
   // })
@@ -786,68 +824,83 @@ const openSecondDepth = (editor: Editor, type: commandKey) => {
   //     event.detail.test
   //   })
   // }
-  const execution: Record<commandKey, () => void> = {
+  const execution: Record<commandKeyType, () => void> = {
     image() {
       commandListFocused = true
       render(editor.options.element, createElement(insertImageCard(editor, 'second')))
-      const activeMenu = document.querySelector('.second-command-depth .header-list .active')
-      activeMenu?.focus()
-      console.log(activeMenu)
+      const activeMenu = document.querySelector(
+        '.second-command-depth .header-list .active',
+      ) as HTMLElement
+
+      if (activeMenu) {
+        tabBorderAnimation(activeMenu)
+        activeMenu.focus()
+      }
     },
     'heading-1'() {
       editor.commands.toggleHeading({ level: 1 })
-      editor.commands.focus('end')
     },
     'heading-2'() {
       editor.commands.toggleHeading({ level: 2 })
-      editor.commands.focus('end')
     },
     'heading-3'() {
       editor.commands.toggleHeading({ level: 3 })
-      editor.commands.focus('end')
     },
     'heading-4'() {
       editor.commands.toggleHeading({ level: 4 })
-      editor.commands.focus('end')
     },
     paragraph() {
       editor.commands.setParagraph()
-      editor.commands.focus('end')
     },
     bullet() {
       editor.commands.toggleBulletList()
-      editor.commands.focus('end')
     },
     ordered() {
       editor.commands.toggleOrderedList()
-      editor.commands.focus('end')
     },
     'code-block'() {
       editor.commands.toggleCodeBlock()
-      editor.commands.focus('end')
     },
   }
   if (type in execution) {
-    closeCommand()
+    closeCommand(editor)
     execution[type]()
   }
 }
 
-// 이미지 파일, 링크 선택시 해당 콘텐츠 변경
-const changeUploadImageType = (e: KeyboardEvent | MouseEvent) => {
-  const target = e.currentTarget
-  const type = target.dataset.type
-  target.parentElement.childNodes.forEach((li: HTMLElement) => li.classList.remove('active'))
-  target.classList.add('active')
+// SecondDepthCommand의 header 탭 border 애니메이션
+const tabBorderAnimation = (target: HTMLElement) => {
+  const RATIO = 0.8
+  const border = document.querySelector<HTMLElement>('.second-command-depth .image-header .border')
+  if (border) {
+    border.style.left = `${target.offsetLeft + target.clientWidth * ((1 - RATIO) / 2)}px`
+    border.style.width = `${target.clientWidth * RATIO}px`
+  }
+}
 
-  const contents = document.querySelector('.image-body')
-  contents?.childNodes.forEach((content) => {
-    if (content.dataset.type === type) {
-      content.classList.add('active')
-    } else {
-      content.classList.remove('active')
-    }
-  })
+// 이미지 파일, 링크 선택시 해당 콘텐츠 변경
+const changeUploadImageType = (e: KeyDownEvent | MouseEvent) => {
+  const tabList = (<HTMLElement>e.currentTarget).parentElement
+  const target = e.currentTarget as HTMLElement
+
+  if (target) {
+    const {
+      dataset: { type },
+    } = target
+
+    ;(<HTMLElement>tabList).childNodes.forEach((li) => (<HTMLElement>li).classList.remove('active'))
+    target?.classList.add('active')
+
+    const contents = document.querySelector('.image-body')
+    contents?.childNodes.forEach((content) => {
+      if ((<HTMLElement>content).dataset.type === type) {
+        ;(<HTMLElement>content).classList.add('active')
+      } else {
+        ;(<HTMLElement>content).classList.remove('active')
+      }
+    })
+    tabBorderAnimation(target)
+  }
 }
 
 // 이미지 파일 업로드
@@ -856,8 +909,7 @@ const onAddImageFile = async (e: any, editor: Editor) => {
   // if (file?.type?.includes('image')) {
   //   // const fileData = await client.assets.upload('image', file)
   //   editor?.chain().focus().setImage({ src: fileData.url }).run()
-  //   closeCommand()
-  //   editor?.commands.focus('end')
+  //   closeCommand(editor)
   // } else {
   //   alert('지원하지 않는 확장자')
   // }
@@ -874,20 +926,25 @@ const showFilePicker = () => {
 const embedImageLink = (editor: Editor) => {
   const embedImageInputRef: HTMLInputElement | null = document.querySelector('.embedImageInputRef')
 
-  if (embedImageInputRef) {
+  if (embedImageInputRef?.value) {
     editor.commands.setImage({ src: embedImageInputRef.value })
-    closeCommand()
-    editor.commands.focus('end')
+    closeCommand(editor)
   }
 }
 
-const onPressEscape = (e: KeyboardEvent) => {
-  e.code === 'Escape' && closeCommand()
+const onPressEscape = (e: KeyDownEvent, editor: Editor) => {
+  e.code === 'Escape' && closeCommand(editor)
 }
 
 // 커맨드 삭제
-const closeCommand = () => {
+const closeCommand = (editor: Editor) => {
   commandListFocused = false
   document.querySelector('.command-container')?.remove()
   console.log('close')
+  editor.commands.focus()
 }
+
+window.addEventListener('resize', () => {
+  const activeItem = document.querySelector('li.active') as HTMLElement
+  if (activeItem) tabBorderAnimation(activeItem)
+})

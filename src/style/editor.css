@@ -197,10 +197,10 @@ ul {
   line-height: 1.3;
 }
 .command-container .image.second-command-depth {
-  position: absolute;
+  position: fixed;
   top: 400px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 35%;
+  /* transform: translateX(-50%); */
   width: 500px;
   background-color: #fff;
   border: 1px solid #eaeaea;
@@ -215,6 +215,7 @@ ul {
 .command-container .image.second-command-depth .image-header {
   padding: 10px 10px 0 10px;
   border-bottom: 1px solid #eaeaea;
+  overflow: hidden;
 }
 .command-container .image.second-command-depth .image-header .header-list {
   display: flex;
@@ -225,11 +226,12 @@ ul {
 .command-container .image.second-command-depth .image-header .header-list > li {
   font-size: 14px;
 }
-.command-container .image.second-command-depth .image-header .header-list > li .border {
-  width: 60%;
+.command-container .image.second-command-depth .image-header .border {
+  width: 30px;
   margin: 0 auto;
   border-bottom: 2px solid #333;
-  transition: opacity 0.15s;
+  transition: left 0.15s ease-in-out, width 0.15s ease-in-out;
+  position: absolute;
 }
 .command-container .image.second-command-depth .image-header .header-list > li:hover > span {
   background: #f0f0f0;
@@ -241,9 +243,7 @@ ul {
 .command-container .image.second-command-depth .image-header .header-list > li:focus > span {
   background: #f0f0f0;
 }
-.command-container .image.second-command-depth .image-header .header-list > li.active .border {
-  opacity: 100%;
-}
+
 .command-container .image.second-command-depth .image-header .header-list > li > span {
   display: inline-block;
   padding: 3px 10px;

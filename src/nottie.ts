@@ -96,7 +96,7 @@ const Heading = BaseHeading.configure({ levels: [1, 2, 3] }).extend({
 const CustomExtension = (target: Element) => {
   const targetEl = target
   return Extension.create({
-    addKeyboardShortcuts() {
+    addKeyboardShortcuts(): any {
       const editor = this.editor
       return {
         '/': () => {
@@ -113,11 +113,9 @@ const CustomExtension = (target: Element) => {
                 )
               }
             }
-            window.addEventListener('keydown', (event) => onPressedNextKey(event as KeyDownEvent))
+            window.addEventListener('keydown', (e) => onPressedNextKey(e as KeyDownEvent))
           }
           onFocusCommand()
-          // _vm.showCommandContainer = true;
-          // _vm.showCommand = true;
           // this.editor.commands.insertContent('<p class="command_spot"> </p>');
         },
       }

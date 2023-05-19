@@ -1,4 +1,4 @@
-import { NeactNode } from 'nottie'
+import { NeactNode } from '../types/nottie'
 import { bindEditor, createElement, render } from '../helper/renderer'
 import type { Editor } from '@tiptap/core'
 import { KeyDownEvent, commandKeyType, pressedKeyType } from '../types/nottie'
@@ -763,13 +763,8 @@ export const moveCommand: MoveCommand = (editor, e) => {
       closeCommand(editor)
     },
     Enter() {
-      // const type = e?.target?.dataset.type
       if (e) {
-        const {
-          target: {
-            dataset: { type },
-          },
-        } = e
+        const type = (<HTMLElement>e.target).dataset.type
 
         currentTab?.setAttribute('tabindex', '-1')
         commandList?.firstElementChild?.setAttribute('tabindex', '0')
@@ -812,6 +807,31 @@ export const onPressAnyKey = (editor: Editor) => {
     window.removeEventListener('keydown', (e) => onPressOtherKey(e as KeyDownEvent))
   }
   window.addEventListener('keydown', (e) => onPressOtherKey(e as KeyDownEvent))
+}
+
+// 커맨드 선택시 마지막에 입력한 '/' 삭제
+const deleteSlash = (editor: Editor) => {
+  const cursorPos = window.getSelection()?.focusOffset
+  const s = window.getSelection()
+  const range = s?.getRangeAt(0)
+
+  // console.log(range?.startOffset - 1)
+  if (cursorPos) {
+    range?.setStart(range.startContainer, cursorPos - 1)
+    console.log(range)
+    range?.deleteContents()
+    range?.detach()
+  }
+  // s?.removeAllRanges()
+
+  // const cursorPos = window.getSelection()?.focusOffset
+  // console.log(cursorPos)
+  // if (cursorPos) {
+  //   editor.commands.deleteRange({
+  //     from: cursorPos,
+  //     to: cursorPos + 1,
+  //   })
+  // }
 }
 
 // 두 번째 커맨드 리스트 열기
@@ -864,6 +884,8 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
   }
   if (type in execution) {
     closeCommand(editor)
+    deleteSlash(editor)
+
     execution[type]()
   }
 }

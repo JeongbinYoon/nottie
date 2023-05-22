@@ -810,28 +810,19 @@ export const onPressAnyKey = (editor: Editor) => {
 }
 
 // 커맨드 선택시 마지막에 입력한 '/' 삭제
-const deleteSlash = (editor: Editor) => {
+const deleteSlash = () => {
   const cursorPos = window.getSelection()?.focusOffset
   const s = window.getSelection()
   const range = s?.getRangeAt(0)
 
   // console.log(range?.startOffset - 1)
   if (cursorPos) {
-    range?.setStart(range.startContainer, cursorPos - 1)
-    console.log(range)
-    range?.deleteContents()
-    range?.detach()
+    // range?.setStart(range.startContainer, cursorPos - 1)
+    // console.log(range)
+    // range?.deleteContents()
+    // range?.detach()
   }
   // s?.removeAllRanges()
-
-  // const cursorPos = window.getSelection()?.focusOffset
-  // console.log(cursorPos)
-  // if (cursorPos) {
-  //   editor.commands.deleteRange({
-  //     from: cursorPos,
-  //     to: cursorPos + 1,
-  //   })
-  // }
 }
 
 // 두 번째 커맨드 리스트 열기
@@ -855,6 +846,7 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
       if (activeMenu) {
         tabBorderAnimation(activeMenu)
         activeMenu.focus()
+        console.log(activeMenu)
       }
     },
     'heading-1'() {
@@ -884,7 +876,7 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
   }
   if (type in execution) {
     closeCommand(editor)
-    deleteSlash(editor)
+    deleteSlash()
 
     execution[type]()
   }
@@ -927,14 +919,23 @@ const changeUploadImageType = (e: KeyDownEvent | MouseEvent) => {
 
 // 이미지 파일 업로드
 const onAddImageFile = async (e: any, editor: Editor) => {
-  // const file = e?.target.files[0]
-  // if (file?.type?.includes('image')) {
-  //   // const fileData = await client.assets.upload('image', file)
-  //   editor?.chain().focus().setImage({ src: fileData.url }).run()
-  //   closeCommand(editor)
-  // } else {
-  //   alert('지원하지 않는 확장자')
-  // }
+  const file = e?.currentTarget.files[0]
+  const reader = new FileReader()
+  if (file?.type?.includes('image')) {
+    reader.onload = (e) => {
+      const result = e?.target?.result as string
+
+      if (result) {
+        // const b = new Blob([result], { type: file.type })
+        // const src = URL.createObjectURL(b)
+        editor.commands.setImage({ src: result })
+      }
+      closeCommand(editor)
+    }
+    reader.readAsDataURL(file)
+  } else {
+    alert('지원하지 않는 확장자입니다.')
+  }
 }
 
 // Input 파일 선택 창 로드

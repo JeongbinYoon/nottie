@@ -60,3 +60,7 @@ export type commandKeyType =
 export interface KeyDownEvent extends KeyboardEvent {
   code: pressedKeyType
 }
+
+export interface MoveCommand {
+  (editor: Editor, e?: KeyDownEvent): void
+}

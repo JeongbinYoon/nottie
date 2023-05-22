@@ -1,4 +1,4 @@
-import { NeactNode } from '../types/nottie'
+import { MoveCommand, NeactNode } from '../types/nottie'
 import { bindEditor, createElement, render } from '../helper/renderer'
 import type { Editor } from '@tiptap/core'
 import { KeyDownEvent, commandKeyType, pressedKeyType } from '../types/nottie'
@@ -25,9 +25,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                   { key: 'tabindex', value: '0' },
                   { key: 'data-type', value: 'image' },
                 ],
-                onclick: () => openSecondDepth(editor, 'image'),
+                onclick: () => executeCommand(editor, 'image'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'image'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'image'),
                 children: [
                   {
                     type: 'div',
@@ -82,10 +82,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'heading-1'),
+                onclick: () => executeCommand(editor, 'heading-1'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'heading-1'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'heading-1'),
                 children: [
                   {
                     type: 'div',
@@ -140,10 +139,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'heading-2'),
+                onclick: () => executeCommand(editor, 'heading-2'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'heading-2'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'heading-2'),
                 children: [
                   {
                     type: 'div',
@@ -198,10 +196,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'heading-3'),
+                onclick: () => executeCommand(editor, 'heading-3'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'heading-3'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'heading-3'),
                 children: [
                   {
                     type: 'div',
@@ -256,10 +253,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'heading-4'),
+                onclick: () => executeCommand(editor, 'heading-4'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'heading-4'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'heading-4'),
                 children: [
                   {
                     type: 'div',
@@ -314,10 +310,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'paragraph'),
+                onclick: () => executeCommand(editor, 'paragraph'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'paragraph'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'paragraph'),
                 children: [
                   {
                     type: 'div',
@@ -372,9 +367,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'bullet'),
+                onclick: () => executeCommand(editor, 'bullet'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'bullet'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'bullet'),
                 children: [
                   {
                     type: 'div',
@@ -429,9 +424,9 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'ordered'),
+                onclick: () => executeCommand(editor, 'ordered'),
                 onkeydown: (e: KeyDownEvent) =>
-                  (e.code === 'Space' || e.code === 'Enter') && openSecondDepth(editor, 'ordered'),
+                  (e.code === 'Space' || e.code === 'Enter') && executeCommand(editor, 'ordered'),
                 children: [
                   {
                     type: 'div',
@@ -486,10 +481,10 @@ const firstDepth = (editor: Editor): NeactNode => {
                 type: 'li',
                 className: ['command__list--item'],
                 attributes: [{ key: 'tabindex', value: '-1' }],
-                onclick: () => openSecondDepth(editor, 'code-block'),
+                onclick: () => executeCommand(editor, 'code-block'),
                 onkeydown: (e: KeyDownEvent) =>
                   (e.code === 'Space' || e.code === 'Enter') &&
-                  openSecondDepth(editor, 'code-block'),
+                  executeCommand(editor, 'code-block'),
                 children: [
                   {
                     type: 'div',
@@ -590,7 +585,7 @@ const secondDepth = (editor: Editor): NeactNode => {
                   {
                     type: 'li',
                     attributes: [
-                      { key: 'tabindex', value: '0' },
+                      { key: 'tabindex', value: '1' },
                       {
                         key: 'data-type',
                         value: 'link',
@@ -721,15 +716,11 @@ const secondDepth = (editor: Editor): NeactNode => {
 export const insertImageCard: bindEditor = (editor: Editor, depth: string) => {
   if (depth === 'first') return firstDepth(editor)
   else if (depth === 'second') return secondDepth(editor)
-  else return secondDepth(editor)
+  // else return secondDepth(editor)
 }
 
 // 커맨드 리스트에서 방향키 컨트롤
 let commandListFocused = false
-interface MoveCommand {
-  (editor: Editor, e?: KeyDownEvent): void
-}
-
 export const moveCommand: MoveCommand = (editor, e) => {
   const commandList = document.querySelector('.command .command__list')
 
@@ -826,7 +817,7 @@ const deleteSlash = () => {
 }
 
 // 두 번째 커맨드 리스트 열기
-const openSecondDepth = (editor: Editor, type: commandKeyType) => {
+const executeCommand = (editor: Editor, type: commandKeyType) => {
   // const myEvent = new CustomEvent('onSlashPress', {
   //   detail: { test: 123 },
   // })
@@ -843,11 +834,23 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
         '.second-command-depth .header-list .active',
       ) as HTMLElement
 
+      locateCommandPos()
+
       if (activeMenu) {
         tabBorderAnimation(activeMenu)
-        activeMenu.focus()
+        setTimeout(() => {
+          activeMenu.focus()
+        }, 0)
         console.log(activeMenu)
       }
+
+      // 바깥 영역 클릭시 커맨드 끄기
+      const commandContainer = document.querySelector('.command-container')
+      commandContainer?.addEventListener('click', (e) => {
+        if ((<HTMLElement>e?.target).classList?.contains('command-container')) {
+          closeCommand(editor)
+        }
+      })
     },
     'heading-1'() {
       editor.commands.toggleHeading({ level: 1 })
@@ -875,8 +878,8 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
     },
   }
   if (type in execution) {
-    closeCommand(editor)
     deleteSlash()
+    closeCommand(editor)
 
     execution[type]()
   }
@@ -884,7 +887,7 @@ const openSecondDepth = (editor: Editor, type: commandKeyType) => {
 
 // SecondDepthCommand의 header 탭 border 애니메이션
 const tabBorderAnimation = (target: HTMLElement) => {
-  const RATIO = 0.8
+  const RATIO = 0.7
   const border = document.querySelector<HTMLElement>('.second-command-depth .image-header .border')
   if (border) {
     border.style.left = `${target.offsetLeft + target.clientWidth * ((1 - RATIO) / 2)}px`
@@ -960,7 +963,7 @@ const onPressEscape = (e: KeyDownEvent, editor: Editor) => {
 }
 
 // 커맨드 삭제
-const closeCommand = (editor: Editor) => {
+export const closeCommand = (editor: Editor) => {
   commandListFocused = false
   document.querySelector('.command-container')?.remove()
   console.log('close')
@@ -970,4 +973,30 @@ const closeCommand = (editor: Editor) => {
 window.addEventListener('resize', () => {
   const activeItem = document.querySelector('li.active') as HTMLElement
   if (activeItem) tabBorderAnimation(activeItem)
+
+  locateCommandPos()
 })
+
+// 커맨드를 그릴 위치 조정
+export const locateCommandPos = () => {
+  const selection = window.getSelection() // 현재 선택 영역 가져오기
+  if (selection && selection?.rangeCount > 0) {
+    const range = selection.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+
+    const command =
+      document.querySelector<HTMLElement>('.command-container .command') ??
+      document.querySelector<HTMLElement>('.command-container .second-command-depth')
+
+    if (command) {
+      if (rect.left + command.offsetWidth + 5 > window.innerWidth) {
+        rect.left < command.offsetWidth
+          ? (command.style.left = `${10}px`)
+          : (command.style.left = `${rect.left - command.offsetWidth}px`)
+      } else {
+        command.style.left = `${rect.left + 5}px`
+      }
+      command.style.top = `${rect.bottom + 5}px`
+    }
+  }
+}

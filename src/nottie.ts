@@ -8,14 +8,21 @@ lowlight.registerLanguage('html', html)
 lowlight.registerLanguage('css', css)
 lowlight.registerLanguage('js', js)
 lowlight.registerLanguage('ts', ts)
-import BaseHeading, { type Level } from '@tiptap/extension-heading'
 import { mergeAttributes, Extension, Editor } from '@tiptap/core'
-import Placeholder from '@tiptap/extension-placeholder'
-import Image from '@tiptap/extension-image'
 import StarterKit from '@tiptap/starter-kit'
+import BaseHeading, { type Level } from '@tiptap/extension-heading'
+import Image from '@tiptap/extension-image'
+import Placeholder from '@tiptap/extension-placeholder'
+import BubbleMenu from '@tiptap/extension-bubble-menu'
 import { createElement, hasCodeTag, render } from './helper/renderer'
 import type { EditorOptions } from '@tiptap/core'
-import { insertImageCard, moveCommand, onPressAnyKey } from './extention/command-tools'
+import {
+  closeCommand,
+  insertImageCard,
+  locateCommandPos,
+  moveCommand,
+  onPressAnyKey,
+} from './extention/command-tools'
 import { KeyDownEvent } from './types'
 
 const classes = {
@@ -53,41 +60,38 @@ const Heading = BaseHeading.configure({ levels: [1, 2, 3] }).extend({
     return {
       // ↓ your new keyboard shortcut
       Tab: (props) => {
-        let selection = window.getSelection()?.focusNode as any
-        let enterCommand = false
-        let canTab = false
-        const lastChar = selection?.data && selection?.data[selection?.data?.length - 1]
-        console.log('lastChar', lastChar)
-        if (selection?.innerText === '/' || lastChar === '/') {
-          canTab = true
-          enterCommand = true
-        } else {
-          while (selection) {
-            if (selection?.classList?.contains('ProseMirror')) {
-              break
-            }
-            if (hasCodeTag(selection)) {
-              canTab = true
-              break
-            }
-            selection = selection?.parentElement || selection.parentElement
-          }
-        }
-
-        if (enterCommand) {
-          return false
-        }
-
-        if (canTab && enterCommand === false) {
-          this.editor.commands.deleteRange
-          return this.editor.commands.onTab()
-        } else {
-          this.editor.commands.sinkListItem('listItem')
-          this.editor.commands.focus('end')
-        }
-
-        console.log('CanTab', canTab)
-        return true
+        // let selection = window.getSelection()?.focusNode as any
+        // let enterCommand = false
+        // let canTab = false
+        // const lastChar = selection?.data && selection?.data[selection?.data?.length - 1]
+        // console.log('lastChar', lastChar)
+        // if (selection?.innerText === '/' || lastChar === '/') {
+        //   canTab = true
+        //   enterCommand = true
+        // } else {
+        //   while (selection) {
+        //     if (selection?.classList?.contains('ProseMirror')) {
+        //       break
+        //     }
+        //     if (hasCodeTag(selection)) {
+        //       canTab = true
+        //       break
+        //     }
+        //     selection = selection?.parentElement || selection.parentElement
+        //   }
+        // }
+        // if (enterCommand) {
+        //   return false
+        // }
+        // if (canTab && enterCommand === false) {
+        //   this.editor.commands.deleteRange
+        //   return this.editor.commands.onTab()
+        // } else {
+        //   this.editor.commands.sinkListItem('listItem')
+        //   this.editor.commands.focus('end')
+        // }
+        // console.log('CanTab', canTab)
+        // return true
       },
     }
   },
@@ -100,8 +104,13 @@ const CustomExtension = (target: Element) => {
       const editor = this.editor
       return {
         '/': () => {
+          closeCommand(editor)
+
           const imageCard = createElement(insertImageCard(this.editor, 'first'))
           render(targetEl, imageCard)
+
+          // 커맨드를 그릴 위치 구하기
+          locateCommandPos()
 
           // '/' > 'ArrowDown' 입력시 커맨드로 포커스 후 이벤트 삭제
           const onFocusCommand = () => {
@@ -117,6 +126,14 @@ const CustomExtension = (target: Element) => {
           }
           onFocusCommand()
           // this.editor.commands.insertContent('<p class="command_spot"> </p>');
+
+          // 바깥 영역 클릭시 커맨드 끄기
+          const commandContainer = document.querySelector('.command-container')
+          commandContainer?.addEventListener('click', (e) => {
+            if ((<HTMLElement>e?.target).classList?.contains('command-container')) {
+              closeCommand(editor)
+            }
+          })
         },
       }
     },
@@ -139,7 +156,10 @@ export const createEditor = ({ editable = true, ...options }: EditorOption) => {
         lowlight,
       }),
       Placeholder.configure({
-        placeholder: 'Write something …',
+        placeholder: '내용을 입력하세요...',
+      }),
+      BubbleMenu.configure({
+        element: document.querySelector('.menu') as HTMLElement,
       }),
       ...(options.extensions ?? []),
     ],

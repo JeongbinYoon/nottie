@@ -18,6 +18,7 @@ import { createElement, hasCodeTag, render } from './helper/renderer'
 import type { EditorOptions } from '@tiptap/core'
 import {
   closeCommand,
+  createAnchor,
   insertImageCard,
   locateCommandPos,
   moveCommand,
@@ -166,11 +167,11 @@ export const createEditor = ({ editable = true, ...options }: EditorOption) => {
     editable,
     // onCreate(props) {},
     onUpdate: ({ transaction }) => {
-      // _vm.cursorPos = transaction.curSelection.$anchor.pos;
       onPressAnyKey(editor)
-      // if (this.editable && this.isMounted) {
-      // this.createAnchor();
-      // }
+
+      if (editable) {
+        createAnchor(editor)
+      }
     },
     ...options,
   })

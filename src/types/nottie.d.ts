@@ -64,3 +64,12 @@ export interface KeyDownEvent extends KeyboardEvent {
 export interface MoveCommand {
   (editor: Editor, e?: KeyDownEvent): void
 }
+
+export interface headingInfo {
+  type: string
+  children: headingInfo[]
+  innerValue: string
+  className: string[]
+  dom: Element
+  onclick: (e) => void
+}

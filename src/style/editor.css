@@ -78,29 +78,29 @@ ul {
 .ProseMirror pre .hljs-strong {
   font-weight: 700;
 }
-.post-anchors {
+.anchor {
   width: 200px;
 }
 @media (min-width: 1440px) {
-  .post-anchors {
+  .anchor {
     position: fixed;
     top: 20%;
     left: 75%;
   }
 }
-.post-anchors .anchors {
+.anchor {
   list-style: none;
   margin: 0;
   padding: 5px 0;
   border-left: 1.5px solid #eaeaea;
   box-sizing: border-box;
 }
-.post-anchors .anchors ul {
+.anchor ul {
   list-style: none;
   padding: 0px;
   margin: 0;
 }
-.post-anchors .anchors li {
+.anchor li {
   width: 100%;
   padding: 5px 0 0 15px;
   color: #777;
@@ -110,7 +110,7 @@ ul {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-.post-anchors .anchors li .active {
+.anchor li .active {
   color: #333;
   font-weight: 700;
 }
@@ -127,7 +127,8 @@ ul {
 }
 .command-container .command {
   position: absolute;
-  width: 300px;
+  width: calc(100% - 20px);
+  max-width: 300px;
   height: 400px;
   overflow-y: hidden;
   background-color: #fff;
@@ -195,9 +196,6 @@ ul {
 }
 .command-container .image.second-command-depth {
   position: fixed;
-  top: 400px;
-  left: 35%;
-  /* transform: translateX(-50%); */
   width: 500px;
   background-color: #fff;
   border: 1px solid #eaeaea;

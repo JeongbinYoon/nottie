@@ -58,6 +58,8 @@ export type commandKeyType =
   | 'code-block'
   | 'blockquote'
 
+export type customEventType = 'keyboardopen' | 'keyboardclose'
+
 export interface KeyDownEvent extends KeyboardEvent {
   code: pressedKeyType
 }

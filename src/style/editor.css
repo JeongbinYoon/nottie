@@ -145,10 +145,10 @@ ul {
 @media (max-width: 767px) {
   .test {
     position: fixed;
-    bottom: 0;
     background: rgba(245, 131, 131, 0.7);
-    height: 30px;
+    height: 40px;
     width: 100vw;
+    transition: top 0.2s ease-out;
   }
   .command-container .command .command__list {
     display: flex;

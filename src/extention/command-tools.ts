@@ -1,4 +1,4 @@
-import { MoveCommand, NeactNode, headingInfo } from '../types/nottie'
+import { MoveCommand, NeactNode, customEventType, headingInfo } from '../types/nottie'
 import { bindEditor, createElement, render } from '../helper/renderer'
 import type { Editor } from '@tiptap/core'
 import { KeyDownEvent, commandKeyType, pressedKeyType } from '../types/nottie'
@@ -1201,31 +1201,49 @@ window.addEventListener('resize', () => {
   locateCommandPos()
 })
 
-let pendingUpdate = false
+console.log()
 
-function viewportHandler(event) {
-  if (pendingUpdate) return
-  pendingUpdate = true
+if ('VisualViewport' in window) {
+  // const debouncedHandleResize = debounce(handleResize, 100)
+  let prevViewportHeight = 0
+  visualViewport?.addEventListener('resize', handleResize)
+  const commandBar = document.querySelector('.test') as HTMLElement
 
-  requestAnimationFrame(() => {
-    pendingUpdate = false
-    const layoutViewport = document.getElementById('layoutViewport')
+  function handleResize(event: UIEvent) {
+    if (commandBar) {
+      commandBar.style.display = 'flex'
 
-    // Since the bar is position: fixed we need to offset it by the
-    // visual viewport's offset from the layout viewport origin.
-    const viewport = event.target
-    console.log(viewport)
-    const offsetLeft = viewport.offsetLeft
-    // const offsetTop =
-    //   viewport.height - layoutViewport.getBoundingClientRect().height + viewport.offsetTop
+      const { height: visualViewportHeight } = event.target as VisualViewport
 
-    // You could also do this by setting style.left and style.top if you
-    // use width: 100% instead.
-    // bottomBar.style.transform = `translate(${offsetLeft}px, ${offsetTop}px) scale(${
-    //   1 / viewport.scale
-    // })`
-  })
+      // keyboard close
+      if (prevViewportHeight - visualViewportHeight < 0) {
+        commandBar.style.display = 'none'
+      }
+      console.log('a')
+
+      commandBar.style.top = `${visualViewportHeight - commandBar?.offsetHeight}px`
+
+      prevViewportHeight = visualViewportHeight
+
+      const eventName =
+        Math.ceil(visualViewportHeight) < window.innerHeight ? 'keyboardopen' : 'keyboardclose'
+      emitEvent.call(event, eventName)
+    }
+  }
+  function emitEvent(name: customEventType) {
+    window.dispatchEvent(
+      new CustomEvent(name, {
+        detail: {
+          originalEvent: this,
+        },
+      }),
+    )
+  }
+  // function debounce(fn: any, wait: number) {
+  //   let cancelId: any = null
+  //   return function debounced(...args: any[]) {
+  //     clearTimeout(cancelId)
+  //     cancelId = setTimeout(fn.bind(this, ...args), wait)
+  //   }
+  // }
 }
-
-window.visualViewport.addEventListener('scroll', viewportHandler)
-window.visualViewport.addEventListener('resize', viewportHandler)

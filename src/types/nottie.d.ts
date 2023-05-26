@@ -56,6 +56,7 @@ export type commandKeyType =
   | 'bullet'
   | 'ordered'
   | 'code-block'
+  | 'blockquote'
 
 export interface KeyDownEvent extends KeyboardEvent {
   code: pressedKeyType

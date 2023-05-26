@@ -78,6 +78,10 @@ ul {
 .ProseMirror pre .hljs-strong {
   font-weight: 700;
 }
+.ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid rgba(0, 0, 0, 0.1);
+}
 .anchor {
   width: 200px;
 }
@@ -137,6 +141,22 @@ ul {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
   font-size: 14px;
   transition: opacity 0.2s;
+}
+@media (max-width: 767px) {
+  .test {
+    position: fixed;
+    bottom: 0;
+    background: rgba(245, 131, 131, 0.7);
+    height: 30px;
+    width: 100vw;
+  }
+  .command-container .command .command__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .command-container .command .command__list > li {
+    flex-basis: 45%;
+  }
 }
 .command-container .command.active {
   opacity: 100%;
